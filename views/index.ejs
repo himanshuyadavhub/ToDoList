@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+</head>
+
+<body>
+    <div class="form-container">
+        <h3>Your tasks list:</h3>
+
+        <form action="/" method="POST" class="task-form" id="taskForm">
+            <input type="text" id="title" name="title" placeholder="Title for task">
+            <textarea id="description" name="description" rows="10" cols="30"placeholder="Describe your task:"></textarea>
+            <input type="submit" value="submit">
+        </form>
+    </div>
+
+    <div class="tasks-container">
+        <% for(item of tasks){ %>
+            <div class="task-item" data-task-id="<%= item._id %>">
+                <p class="task-title">Title : <span><%= item.title %></span></p>
+                <p class="task-description">Description : <span><%= item.description %></span></p>
+                <button class="action-button" id="edit" onclick="editTask(event)">Edit</button>
+                <button class="action-button" id="delete" onclick="deleteTask(event)">Delete</button>
+            </div>
+            <% } %>
+    </div>
+
+    <script>
+        function deleteTask(event) {
+            const taskElement = event.target.closest('.task-item');
+            // Remove the task element from the DOM
+            if (taskElement) {
+                taskElement.remove();
+            }
+
+            const taskId = taskElement.getAttribute('data-task-id');
+            fetch(`/delete-task/${taskId}`, {
+                method: 'DELETE',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Task deleted:', data);
+                })
+                .catch(error => {
+                    console.error('Error deleting task:', error);
+                });
+        }
+
+        function editTask(event) {
+            const button = event.target;
+            const taskElement = button.closest('.task-item');
+            const titleElement = taskElement.querySelector('.task-title');
+            const descriptionElement = taskElement.querySelector('.task-description');
+
+            // Save the current values to use them as default in the input fields
+            const currentTitle = titleElement.querySelector('span').textContent;
+            const currentDescription = descriptionElement.querySelector('span').textContent;
+
+            // Replace the inner HTML with input fields
+            titleElement.innerHTML = `Title: <input type="text" value="${currentTitle}" class="edit-title">`;
+            descriptionElement.innerHTML = `Description: <textarea class="edit-description">${currentDescription}</textarea>`;
+
+            // Change the button to save mode
+            button.textContent = 'Save';
+            button.onclick = (e) => saveTask(e, taskElement);
+        }
+
+        function saveTask(event, taskElement) {
+            const button = event.target;
+
+            if (!taskElement) {
+                console.error('Task element not found');
+                return;
+            }
+
+            // Find the input fields
+            const titleInput = taskElement.querySelector('.edit-title');
+            const descriptionInput = taskElement.querySelector('.edit-description');
+
+            // Get the updated values
+            const updatedTitle = titleInput.value;
+            const updatedDescription = descriptionInput.value;
+
+            // Replace input fields with the updated values
+            const titleElement = taskElement.querySelector('.task-title');
+            const descriptionElement = taskElement.querySelector('.task-description');
+            titleElement.innerHTML = `Title: <span>${updatedTitle}</span>`;
+            descriptionElement.innerHTML = `Description: <span>${updatedDescription}</span>`;
+
+            // Change the button back to edit mode
+            button.textContent = 'Edit';
+            button.onclick = editTask;
+
+            // Optionally, send the updated data to the server
+            const taskId = taskElement.getAttribute('data-task-id');
+            fetch(`/update-task/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: updatedTitle,
+                    description: updatedDescription,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Task updated:', data);
+                })
+                .catch(error => {
+                    console.error('Error updating task:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

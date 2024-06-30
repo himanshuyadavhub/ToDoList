@@ -1,0 +1,92 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0px;
+    padding: 10px;
+}
+
+/* Form Container */
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.form-container h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container input[type="text"],
+.form-container textarea,
+.form-container input[type="submit"] {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.form-container input[type="submit"] {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Tasks Container */
+.tasks-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.tasks-container p {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+
+
+.action-button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+#edit {
+    background-color: #1e18e5;
+    color: #fff;
+}
+
+#edit:hover {
+    background-color: #0e02f9;
+}
+
+#delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+#delete:hover {
+    background-color: #c82333;
+}
